@@ -1,0 +1,204 @@
+NOTES:
+geom_hist and geom_density - good for visualizing distribution of numerical columns
+geom_bar and geom_col - good at visualizing categorical vs numerical AND number of occurences in a categorical col
+geom_boxplot - getting shape & distribution of numberical vars
+geom_scatter + geom_line - best for visualizing 2 numerical
+geom_line - ONLY MAKES SENSE WHERE THERE IS A NOTION OF ORDER (e.g. the x-axis is year and they all connect together)
+geom_bar - shows a bar plot for count of categorical variables
+geom_col - allows you to specify an x and y 
+geom_hline - draws a horizontal line, requires a Y intercept
+geom_vline - draws a horizontal line, requires a X intercept
+geom_abline - draws linear function, requires slope & intercept
+geom_segment - draws a straigh line between (x, y) and (xend, yend)
+geom_smooth - plots a line/curve of best fit
+
+arrange(asc(col)) to arrange a column by ascending order
+arrange(asc(col)) to arrange a column by descending order
+relocate(data, col, .before, .after) - relocates a column relative to its neighbors, specifying none moves it to the leftmost col, specifyfing both is an error
+slice() indexes rows
+
+Suppose we have the following table fish_encounters
+  fish  station  seen
+1 4842  Release     1
+2 4842  I80_1       1
+3 4842  Lisbon      1
+4 4842  Rstr        1
+5 4842  Base_TD     1
+6 4842  BCE         1
+7 4842  BCW         1
+8 4842  BCE2        1
+9 4842  BCW2        1
+10 4842  MAE         1
+
+fish_encounters \%>\% pivot_wider(names_from = station, values_from = seen, values_fill = 0)
+
+  fish  Release I80_1 Lisbon  Rstr Base_TD   BCE   BCW  BCE2  BCW2   MAE
+1 4842        1     1      1     1       1     1     1     1     1     1
+2 4843        1     1      1     1       1     1     1     1     1     1
+3 4844        1     1      1     1       1     1     1     1     1     1
+4 4845        1     1      1     1       1     0     0     0     0     0
+
+Suppose we have the following table billboard
+#>    artist     track date.entered   wk1   wk2   wk3   wk4   wk5   wk6   wk7
+#>    <chr>      <chr> <date>       <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#>  1 2 Pac      Baby… 2000-02-26      87    82    72    77    87    94    99
+#>  2 2Ge+her    The … 2000-09-02      91    87    92    NA    NA    NA    NA
+#>  3 3 Doors D… Kryp… 2000-04-08      81    70    68    67    66    57    54
+#>  4 3 Doors D… Loser 2000-10-21      76    76    72    69    67    65    55
+#>  5 504 Boyz   Wobb… 2000-04-15      57    34    25    17    17    31    36
+
+billboard %>% pivot_longer(cols = starts_with("wk"), names_to = "week", names_prefix = "wk", values_to = "rank", values_drop_na = TRUE)
+The following is the result
+#>    artist  track                   date.entered week   rank
+#>    <chr>   <chr>                   <date>       <chr> <dbl>
+#>  1 2 Pac   Baby Don't Cry (Keep... 2000-02-26   1        87
+#>  2 2 Pac   Baby Don't Cry (Keep... 2000-02-26   2        82
+#>  3 2 Pac   Baby Don't Cry (Keep... 2000-02-26   3        72
+#>  4 2 Pac   Baby Don't Cry (Keep... 2000-02-26   4        77
+#>  5 2 Pac   Baby Don't Cry (Keep... 2000-02-26   5        87
+#>  6 2 Pac   Baby Don't Cry (Keep... 2000-02-26   6        94
+#>  7 2 Pac   Baby Don't Cry (Keep... 2000-02-26   7        99
+#>  8 2Ge+her The Hardest Part Of ... 2000-09-02   1        91
+#>  9 2Ge+her The Hardest Part Of ... 2000-09-02   2        87
+#> 10 2Ge+her The Hardest Part Of ... 2000-09-02   3        92
+
+bind_rows(df1, df2, ...) - takes dataframes that have the same columns and concatenates their rows
+bind_cols(df1, df2, ...) - takes dataframes that have the same # of rows and concatenates their columns, renames duplicated cols
+
+semi_join(x, y, by) - returns all rows from x w/ a matching value for by in y
+anti_join(x, y, by) - returns all rows from x w/o a match in y
+left_join(x, y, by), right_join(x, y, by)
+full_join(x, y, by) - like an outer join
+
+ymd(), dmy(), .... - converts a string to datetime object
+
+strc() - concatenates strings/vectors of strings
+str_detect(string, pattern) - returns TRUE if there exists a substring of string that matches pattern
+str_extract(string, pattern, group = NULL) - finds the 1st match in string for pattern, group takes the matching pattern and returns the matching text from that
+str_extract_all(string, pattern) - returns all matches
+str_sub(string, start, end) - indexes into a string
+str_count(string, pattern) - count # of matches to pattern in string 
+str_replace(string, pattern, replacement), str_replace_all(string, pattern, replacement)
+
+putting color, fill, alpha, etc. outside of aes(), i.e. typically inside of geom_x() functions will set it as a constant for the whole graph
+putting color, fill, alpha, etc. inside of aes() typically implies you have a column in your df (like year) that sets the groups appropriately
+every geom_x() function inherits the aes() from ggplot, unless they have their own aes() which overrides the ggplot
+R always prints dates as YYYY-MM-DD
+wdate() gets the day of the week for a given date
+
+E(X) = \mu, but you can also get values of functions like E(X^2), which is \mu of the distribution where everything is squared
+Var(X) = E((X - \mu)^2), so SD(X) = \sqrt{E((X - \mu)^2)} 
+E(X) = \sum{P(X = x) * x}
+
+p(i) function for probability - for binom, P(X <= i), for normal P(X < i)
+d(i) function for probability - gets the value at the respective density fcn
+q(i) function for probability - tells you the smallest value that satisfies a certain area to the left, i.e. what observation is at a given quantile
+
+Binom is a discrete distribution
+tion that models the # of successes in a fiex series of trials
+B - binary outcomes
+I - indepencence (results of trials don't affect each other)
+N - fixed smaple size (TODO)
+S - same probability
+Mean of binomial - n * p
+Variance of binomial - n * p * (1 - p)
+Binomial Probabilities formula - P(X = k) = \choose{n}{k}p^k(1 - p)^n-k
+\choose{n}{k} = \frac{n!}{k!(n-k)!}
+
+
+Normal is a continious distribution
+To standardize:
+Z = \frac{x - \mu}{\sigma} \sim N(0, 1), get the z-score for any observation and it will be the equivalent observation in the standard normal
+Normal approximates binomial, an approximation is deemed good enough if np * (1- p) /geq 10 (n must be large, p can't be too close to 0 or 1)
+This is due to a large/small p causing a skewing and small n has too much variance
+Correction for continuity:
+If you are using normal to approximate binomial distribution and you want to find pnorm, use p(norm + .5) if you want leq, p(norm - .5) if you want geq
+X \sim Binom(n, p) \approx N(np, \sqrt{np * (1 - p)}
+As a general rule,
+65% of data 1 SD from the mean 
+95% of data 2 SD from the mean 
+99% of data 3 SD from the mean 
+
+Central limit theorem
+The probability distribution of a sample mean converges to a normal as the sample size increases
+In practice what this means is that for a random sample of a distribution w/ \mu and \sigma, a random sample will have mean \mu and standard deviation \frac{\sigma}{\sqrt{n}}, where n is the size of the random sample, and \mu and\sigma are from the original distribution
+IMPORTANT \mu and \sigma are the TRUE VALUES of a distribution, if you only know point estimates you can only approximate point estimates of random samples
+
+Standard error for sample proportion - SE(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}, use \hat{p} in place of p in the formula
+To find a confidence interval for \hat{p} - \hat{p} \pm SE * z
+z - the z-score ST the corresponding confidence interval is caught in the data, this can be found using qnorm, USE THE STANDARD NORMAL
+
+Agresti-coull method - Wald method but instead of using x use x + 2, and repalce n with n + 4
+
+Standard error for difference in proportions - SE(\hat{p_1} - \hat{p_2}) = \sqrt(\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2})
+
+To find the confidence interval when doing inference on means:
+\bar{x} \pm z * SE
+z = qt(p, df - 1), where df is the number of observations 
+T = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}, where \mu_0 is the hypothesized mean for the null hypothesis 
+sample variance = \sum_{i = 1}^{n}\frac{(x_i - \bar{x})^2}{n - 1}
+When n is small the T distribution is like a stretched out normal
+When you have paired data you are more interested inthe difference between observations (on the same subject)
+For paired just do the T test on the difference between observations
+ALWAYS ROUND DOWN DEGREES OF FREEDOM IF THEY'RE INTEGERS
+
+In regex to specify a special character you need to put "\\." (matches everything) vs "." (matches a period)
+Thus to get a literal "\" in your regex expression you need "\\\\", since on the 1st pass r will escape the backslashes, then stringr needs to do the same.
+\d - digits
+\s - whitespace
+\w - alphabetic and numeral
+Capitalizing any of the above is the complement
+You can also create your own character classes using []:
+[abc]: matches a, b, or c.
+[a-z]: matches every character between a and z (in Unicode code point order).
+[^abc]: matches anything except a, b, or c.
+[\^\-]: matches ^ or -.
+^  - matches the start of each line.
+$ - matches the end of each line
+ ?: 0 or 1.
++: 1 or more.
+*: 0 or more
+
+    {n}: exactly n
+    {n,}: n or more
+    {n,m}: between n and m
+
+Parenthesis make groups which can be backreferenced
+pattern <- "(..)\\1" #(..) is some pair of anything, and \\1 takes that same pair 
+fruit %>% str_subset(pattern)
+#> [1] "banana"      "coconut"     "cucumber"    "jujube"      "papaya"     
+#> [6] "salal berry"
+
+Two-sample t-test
+Assume the distriubtions have equal variance
+Mean is normally distributed
+$$SE=S_p*\sqrt{\frac1{n_x}+\frac1{n_y}}=\sqrt{\frac{\sum(x_i-\bar{x})^2+\sum(y_i-\bar{y})^2}{n_x+n_y-2}}\cdot\sqrt{\frac1{n_x}+\frac1{n_y}}$$
+$$t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\bar{Y})}$$, note that \mu_{X0}-\mu_{Y0} is the \textbf{difference} in hypothesized means for the null hypothesis, so if H_0: \mu_X - \mu_Y = 40, then \mu_{X0}-\mu_{Y0} = 40
+$$\textstyle DF=n_x+n_y-2$$
+$$(\bar{X}-\bar{Y})\pm t_{crit}*SE$$
+
+Welch t-test	
+Use when variance is not similar
+Mean is normally distributed
+$$SE=\sqrt{\frac{s_x^2}{n_x}+\frac{s_y^2}{n_y}}$$
+$$t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\bar{Y})}$$
+$DF=\frac{(s_x^2/n_x\,+\,s_y^2/n_y)^2}{(s_x^2/n_x)^2/(n_x-1)\,+\,(s_y^2/n_y)^2/(n_y-1)}$
+ $$(\bar{X}-\bar{Y})\pm t_{crit}*SE$$
+
+Correlation coeff
+Assumes the relationship is linear
+If the relationship is linear, how strong is it?
+$$r = \mathsf{Corr}(x,y) = \frac{1}{n-1}\sum_{i=1}^n\left(\frac{x_i - \bar{x}}{s_x} \right)\left(\frac{y_i - \bar{y}}{s_y} \right)$$
+
+Residual graph
+When there's a curve in the data the mean of residuals \neq 0, thus there's nonlinearity
+Nonconstant variance (when there's a fanning in/spreading out of data), thus can typically be remedied with some sort of transformation
+
+Note that the t-value of the output of summary() is only for doing hypothesis test of slope for slope \neq 0
+To find confidence interval use provided method, to hypothesis test use a t test
+Always use observations - 2 for df
+
+To hypothesis test the power law check if \theta = 1
+
+Confidence interval is an interval that the regression line can pass thru
+Prediction interval is an interval that 95% of observations in the dataset will be in

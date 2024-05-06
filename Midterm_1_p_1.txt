@@ -1,0 +1,54 @@
+1. D
+bar chart - 1 qualitative variable 1 quantative
+density plot - 1 continious/quantitative variable
+histogram - 1 continious/quantitative variable
+scatter plot - 2 quantitative 
+2. AD
+X == NA doesn't work, R looks for an object called NA
+3. AC
+4. A D?
+5. C
+1 SD = .62
+2 SD = .95
+3 SD = .99
+6. A
+7. D
+8. C B
+hour is included since an id_cols column is needed to identify the rows
+any columns not specificed will be simply added on
+9. 
+returns 2 rows since it doesn't break ties
+1 4 5 red
+2 6 5 blue
+
+10.
+## max color
+1    9      red
+2    11     blue
+
+11.
+select(-col_name) drops col_name
+##    color   n   y 
+ 1      red   1   5
+ 2     blue   2   1
+ 3     blue   2   5
+12. The values in A represents the percentage of women who were repesented in the dataset that have their age as the age column. The same can be said for B except it's with men.
+
+13.
+pivot longer:
+column name = names_to
+values_to = the values of the wide df column name
+
+obesity_2 = the estimated population, obese population, and obesity rate of different sexes of different zip codes that, excluding minors, have zip codes of 8 age group samples irrespective of sex. 
+
+education = education but instead of having a row per zip code there is now 1 row per each zip-sex combination, where w is the appropriate pct_male_bach or pct_female_bach depending on the new sex column
+
+education_2 = a df that has the obesity rate and bachelor-holding population for each zip sex combination that education and obesity_2 have in common (this implies that obesity rate of different sexes of different zip codes that, excluding minors, have zip codes of 8 age group samples irrespective of sex)
+
+summary_2 = U is obesity rate by sex V is the bachelors percentage by sex of different zip codes that, excluding minors, have zip codes of 8 age group samples irrespective of sex
+
+14. 
+xlab("Bachelor's percentage")
+ylab("Obesity rate")
+
+

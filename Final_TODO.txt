@@ -1,0 +1,24 @@
+TO DO:
+difference vs geom_bar and geom_col? 
+geom_hline, geom_vline, geom_abline, geom_segment - LEARN SYNTAX
+Know how to estimate mean/median, std, quantile (know quartile) from plot of data
+arrange asc and desc
+relocate, slice, pivot, bind_rows, bind_cols
+anti_join, filtering joins
+joins
+pivot
+important date fcns
+str_c(), str_detect(), str_extract(), str_sub(), str_count(), str_replace()
+regex
+
+random variables
+expectations
+proportional probabilites
+know binomials
+rbinom, dbinom, pbinom, qbinom
+Central Limit theorem
+Agresti-coull method
+Hypothesis testing (EVERYTHING)
+Expectation stuff
+Power law
+Confidence & prediction intervals
