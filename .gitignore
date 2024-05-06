@@ -1,6 +1,4 @@
-*.aux
-*.fls
-*.log
-*.out
-*.synctex.gz
+latexsheet*
+!latexsheet.pdf
+!latexsheet.tex
 *.ini
