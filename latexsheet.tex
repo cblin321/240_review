@@ -6,6 +6,7 @@
 \usepackage[landscape]{geometry}
 \usepackage{hyperref}
 \usepackage[fontsize=6pt]{fontsize}
+\usepackage{amsmath}
 % To make this come out properly in landscape mode, do one of the following
 % 1.
 %  pdflatex latexsheet.tex
@@ -228,53 +229,70 @@ You can also create your own character classes using []:
 \verb![^abc]!   & matches anything except a, b, or c \\
 \verb![\^\-]!   & matches \textasciicircum or - \\
 \end{tabular}
-
 Parenthesis make groups which can be backreferenced \\
 pattern <- "(..)\textbackslash\textbackslash1" \#(..) is some pair of anything, and \\1 takes that same pair  \\
 fruit \%>\% str\_subset(pattern) \\
 "banana"      "coconut"     "cucumber"    "jujube"    "papaya" "salal berry"
 
-\subsection{Miscellaneous}
-\settowidth{\MyLen}{\texttt{.pagestyle.empty.} }
+\subsection{Probability Theory}
+For some random variable $X$, $E(X) = \sum_{x = 0}^{n} x * P(X = x)$. \\
+The expected value is just the sum of each outcome multiplied by its porbability. \\
+$Var(X) = E((X - \mu) ^ 2)$, $\mu = E(X)$ \\
+Again, this is just multiplying the squared difference of the mean from each observation with each observation's respective probability, $sum((x-mu)^2*p)$.
+
+Suppose that the distribution of $X$ is proportional with the function $g(x) = 6 - |x - 5|$. \\
+Say that we have outcomes $1, 2, \cdots, 10$, this means $P(X = x) = a(6 - |x - 5|)$. \\
+We know that the total number of outcomes and number of current outcomes must be proportional to the function. \\
+The way to make the number of outcomes proportional is to find $\sum_{i = 1}^{10}6 - |i - 5|$. \\
+To keep the possible values proportional, each probability is $\frac{j}{\sum_{i = 1}^{10}6 - |i - 5|}$, $j \in {g(1), g(2), \cdots, g(10)}$.
+
+\subsection{Binomial Distributions}
+Properties of Binomials
 \begin{tabular}{@{}p{\the\MyLen}%
-                @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\pagestyle{empty}!     &   Empty header, footer
-                                 and no page numbers. \\
-\verb!\tableofcontents!      &   Add a table of contents here. \\
-
+        @{}p{\linewidth-\the\MyLen}@{}}
+\verb!b! & binary outcomes \\
+\verb!i! & independence \\
+\verb!n! & fixed sample size \\
+\verb!s! & same probability \\
+\end{tabular} \\
+Binomial Formulas \\
+\begin{tabular}{@{}p{\the\MyLen}%
+        @{}p{\linewidth-\the\MyLen}@{}}
+$\mu = np$ & $\sigma = np(1 - p)$ \\
+binom prob & $P(X = k) = \binom{n}{k} {p^k(1 - p)^{n-k}}$ \\
 \end{tabular}
-
-
-
-\section{Document structure}
-\begin{multicols}{2}
-\verb!\part{!\textit{title}\verb!}!  \\
-\verb!\chapter{!\textit{title}\verb!}!  \\
-\verb!\section{!\textit{title}\verb!}!  \\
-\verb!\subsection{!\textit{title}\verb!}!  \\
-\verb!\subsubsection{!\textit{title}\verb!}!  \\
-\verb!\paragraph{!\textit{title}\verb!}!  \\
-\verb!\subparagraph{!\textit{title}\verb!}!
-\end{multicols}
-{\raggedright
-Use \verb!\setcounter{secnumdepth}{!$x$\verb!}! suppresses heading
-numbers of depth $>x$, where \verb!chapter! has depth 0.
-Use a \texttt{*}, as in \verb!\section*{!\textit{title}\verb!}!,
-to not number a particular item---these items will also not appear
-in the table of contents.
-}
-
-\subsection{Text environments}
+R Binomial Functions \\
+\begin{tabular}{@{}p{\the\MyLen}%
+        @{}p{\linewidth-\the\MyLen}@{}}
+\verb!rbinom(n, size, prob)! & \hskip3em random binomial samples \\
+\verb!dbinom(x, size, prob)! & \hskip3em density fcn at \verb!x! \\
+\verb!qbinom(p, size, prob)! & \hskip3em get the smallest value in the \verb!q!th quantile \\
+\verb!pbinom(q, size, prob)! & \hskip3em $P(X<= \verb!q!)$ \\
+\verb!pbinom(q, size, prob, lower.tail = T)! & \hskip9.5em $1 - P(X<= \verb!q!) = p(X > \verb!q!)$ \\
+\end{tabular}
+Note that $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+\subsection{Normal Distributions}
 \settowidth{\MyLen}{\texttt{.begin.quotation.}}
+R Normal Functions*
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\begin{comment}!    &  Comment (not printed). Requires \texttt{verbatim} package. \\
-\verb!\begin{quote}!      &  Indented quotation block. \\
-\verb!\begin{quotation}!  &  Like \texttt{quote} with indented paragraphs. \\
-\verb!\begin{verse}!      &  Quotation block for verse.
+\verb!pnorm(q, size, prob)! & \hskip3em $P(X< \verb!q!)$ \\
 \end{tabular}
-
-\subsection{Lists}
+At any given $x$, $X \sim N(\mu, \sigma)$, $P(X = x) = 0$. \\
+The standard normal is $X \sim N(0, 1)$. \\
+Any normal has its z-scores as equivalent observations in the standard normal. \\
+In other words, $X \sim N(\mu, \sigma) \implies Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$. \\
+*includes \verb!rnorm()!, \verb!qnorm()! which have same functionality as the binom fcns \\
+Suppose that $\exists X \sim Binom(n, p)$, with $np(1 - p) \geq 10$ \\
+Note the conditions this tests, $p$ can't be too close to 0 or 1 (causes skew), and $n$ must be sufficiently large (reduces variance). \\
+We can approximate that binomial with $X \sim N(np, \sqrt{np(1 - p)})$. \\
+Recall that this appoximation isn't perfect, the normal has an effect of "cutting off" the binomial distribution. \\
+Correct for this with $P(X \leq x + .5)$ wheing finding $P(X \leq x)$, $P(X \geq x - .5)$ when finding $P(X \geq x)$ \\
+As a general rule, \\
+65\% of data 1 SD from the mean \\
+95\% of data 2 SD from the mean \\
+99\% of data 3 SD from the mean \\
+\subsection{Inference on Proportions}
 \settowidth{\MyLen}{\texttt{.begin.description.}}
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}

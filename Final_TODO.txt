@@ -14,8 +14,10 @@ regex
 random variables
 expectations
 proportional probabilites
+
 know binomials
 rbinom, dbinom, pbinom, qbinom
+
 Central Limit theorem
 Agresti-coull method
 Hypothesis testing (EVERYTHING)
