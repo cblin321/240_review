@@ -1,6 +1,7 @@
 \documentclass[10pt,landscape]{article}
 \usepackage{multicol}
 \usepackage{calc}
+\usepackage{amssymb}
 \usepackage{ifthen}
 \usepackage{array}
 \usepackage[landscape]{geometry}
@@ -95,7 +96,8 @@
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{2pt}
 
-\section{Data Visualization}
+\section{Data/R}
+\subsection{Data Visualization}
 \begin{tabular}{@{}ll@{}}
 \verb!geom_hist and geom_density!    & distribution of numerical columns \\
 \verb!geom_bar!  & number of occurences in a categorical col \\
@@ -233,7 +235,7 @@ Parenthesis make groups which can be backreferenced \\
 pattern <- "(..)\textbackslash\textbackslash1" \#(..) is some pair of anything, and \\1 takes that same pair  \\
 fruit \%>\% str\_subset(pattern) \\
 "banana"      "coconut"     "cucumber"    "jujube"    "papaya" "salal berry"
-
+\section{Basic Probability}
 \subsection{Probability Theory}
 For some random variable $X$, $E(X) = \sum_{x = 0}^{n} x * P(X = x)$. \\
 The expected value is just the sum of each outcome multiplied by its porbability. \\
@@ -258,7 +260,7 @@ Properties of Binomials
 Binomial Formulas \\
 \begin{tabular}{@{}p{\the\MyLen}%
         @{}p{\linewidth-\the\MyLen}@{}}
-$\mu = np$ & $\sigma = np(1 - p)$ \\
+$\mu = np$ & $\sigma^2 = np(1 - p)$ \\
 binom prob & $P(X = k) = \binom{n}{k} {p^k(1 - p)^{n-k}}$ \\
 \end{tabular}
 R Binomial Functions \\
@@ -280,7 +282,7 @@ R Normal Functions*
 \end{tabular}
 At any given $x$, $X \sim N(\mu, \sigma)$, $P(X = x) = 0$. \\
 The standard normal is $X \sim N(0, 1)$. \\
-Any normal has its z-scores as equivalent observations in the standard normal. \\
+Any normal has its z-scores as equivalent observations in the standard normal.
 In other words, $X \sim N(\mu, \sigma) \implies Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$. \\
 *includes \verb!rnorm()!, \verb!qnorm()! which have same functionality as the binom fcns \\
 Suppose that $\exists X \sim Binom(n, p)$, with $np(1 - p) \geq 10$ \\
@@ -292,51 +294,124 @@ As a general rule, \\
 65\% of data 1 SD from the mean \\
 95\% of data 2 SD from the mean \\
 99\% of data 3 SD from the mean \\
+\section{Inference}
+
 \subsection{Inference on Proportions}
 \settowidth{\MyLen}{\texttt{.begin.description.}}
+Formulas ($\hat{P}$* is a random estimator for point estimate $\hat{p}$):
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\begin{enumerate}!        &  Numbered list. \\
-\verb!\begin{itemize}!          &  Bulleted list. \\
-\verb!\begin{description}!      &  Description list. \\
-\verb!\item! \textit{text}      &  Add an item. \\
-\verb!\item[!\textit{x}\verb!]! \textit{text}
-                                &  Use \textit{x} instead of normal
-                        bullet or number.  Required for descriptions. \\
+$Var(\hat{P})$        &  $Var(\frac{X}{n}) = \frac{Var(X)}{n}$ \\
+$SE(\hat{p})$          &  $\sqrt{Var(\hat{P})}$ \\
+CI      & \hskip3em  $\hat{p} \pm z * SE$ \\
+$z$      & \hskip3em  $qnorm(1 - \frac{p}{2})$* \\
 \end{tabular}
+*$\hat{P} \sim N(p, \sqrt{\frac{p(1-p)}{n}})$, this is still random\\
+*where $p$ is the desired conf interval \\
+Agresti-Coull Method (use $\tilde{p}$ in place of $\hat{p}$)\\
+\begin{tabular}{@{}p{\the\MyLen}%
+        @{}p{\linewidth-\the\MyLen}@{}}
+$\tilde{p}$        &  $\frac{x + 2}{n + 4}$ \\
+$SE(\tilde{p})$          &  $\sqrt{\frac{\tilde{p}(1 - \tilde{p})}{n + 4}}$ \\
+CI      & \hskip3em  $\tilde{p} \pm z * SE$ \\
+$z$      & \hskip3em  $qnorm(1 - \frac{p}{2})$* \\
+\end{tabular} \\
+*where $p$ is the desired conf interval \\
+In theory this is a better estimate, still when $SE$ is too small the $CI$ can be too narrow. \\
+Using $\tilde{p}$ moves the estimate closer to $.5$. \\
+When $\hat{p}$ is closer to 0 or 1 than $p$, $SE$ tends to be underestimated, and vice versa for $\hat{p}$ closer to $.5$ than $p$. \\
+Hypothesis testing - determine if a result we found was due to random chance
+\begin{enumerate}
+        \item Have a binomial model
+        \item State $H_0$ and $H_A$
+        \item Choose test statistic 
+        \item Find p-value and see if it's under some $\alpha$
+\end{enumerate}
+Assume $H_0$ is true. Now find probability we observed a certain outcome. \\
+Suppose $H_0 | X \sim Binom(n, k)$ and $H_0: k = .5$, $H_A: k \ne .5$. 
+We observe $j$ successes and $n$ observations in total. Then $p$ is $2 * qnorm(j, n, .5)$, 
+since the probability distribution is symmetric and $\ne$ necessitates a 2-sided test. 
+$H_0$ also assumes a binomial distribution w/ chance of success being $.5$. \\
+Differnce in Proportions\\
+\begin{tabular}{@{}p{\the\MyLen}%
+        @{}p{\linewidth-\the\MyLen}@{}}
 
+$\bar{p}$          &  $\frac{x_1 + x_1}{n_1 + n_2}$ \\
+$SE(\hat{p_1} -\hat{p_2})$          &  $\sqrt{\frac{\bar{p}(1-\bar{p})}{n_1} + \frac{\bar{p}(1-\bar{p})}{n_2}}$ \\
+CI      & \hskip3em  $\tilde{p} \pm z * SE$ \\
+$z$      & \hskip3em  $qnorm(1 - \frac{p}{2})$* \\
+\end{tabular} \\
+*where $p$ is the desired conf interval \\
+Agresti-Coffe Method (use $\tilde{p}$ in place of $\hat{p}$)\\
+\begin{tabular}{@{}p{\the\MyLen}%
+        @{}p{\linewidth-\the\MyLen}@{}}
+$\tilde{p}$        &  $\frac{x + 1}{n + 2}$ \\
+$SE(\tilde{p_1} - \tilde{p_2})$          &  $\sqrt{Var(\tilde{p_1}) + Var(\tilde{p_2})}$ \\
+$Var(\tilde{p_i})$          &  $\frac{\tilde{p_i}*(1 - \tilde{p_i})}{(n_i + 2))}$ \\
+CI      & \hskip3em  $\tilde{p} \pm z * SE$ \\
+$z$      & \hskip3em  $qnorm(1 - \frac{p}{2})$* \\
+\end{tabular} \\
+Hypothesis Testing Difference in Proportions - determine if result was due to random chance
+\begin{enumerate}
+        \item Have 2 binomial models
+        \item State $H_0$ and $H_A$
+        \item Choose test statistic 
+        \item Find p-value and see if it's under some $\alpha$
+\end{enumerate}
+Say that $H_0: p_1 - p_2 = 0$, $H_A: p_1 \ne p_2$. Say that the number of success is $i_1$ and $i_2$ respectively. \\
+Since we test $p_1 - p_2$ the differnces will be normally distributed. \\
+Estimate the combined probability as $\bar{p} = \frac{i_1 + i_2}{n_1 + n_2}$. \\
+Again, assuming $H_0$ is true calculate $z$. $z = \frac{(\hat{p_1} - \hat{p_2}) - (p_1 - p_2)}{SE}$. THIS $p_1 - p_2$ IS THE $p_1 - p_2$ DEFINED BY $H_0$. \\
+ $p$ is the area area under the standard normal, or $2 * P(X > z)$ in this case.
 
-
-
-\subsection{References}
+\subsection{Inference on Means}
 \settowidth{\MyLen}{\texttt{.pageref.marker..}}
+Formulas:
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\label{!\textit{marker}\verb!}!   &  Set a marker for cross-reference, 
-                          often of the form \verb!\label{sec:item}!. \\
-\verb!\ref{!\textit{marker}\verb!}!   &  Give section/body number of marker. \\
-\verb!\pageref{!\textit{marker}\verb!}! &  Give page number of marker. \\
-\verb!\footnote{!\textit{text}\verb!}!  &  Print footnote at bottom of page. \\
+\verb!CI!   &   $z * SE$  \\
+$z$   &   $qt(p, n - 1)$  \\
+$SE(\bar{x})$   &   $\frac{\sigma}{\sqrt{n}}$  \\
+$T$ & $\frac{\bar{X} - \mu_0}{s / \sqrt{n}}$* \\
+$s$ & $\sqrt{\frac{\sum_{i = 1}^{n}(x_i - \bar{x})^2}{n - 1}}$
 \end{tabular}
+*$\mu_0$ is the value assumed to be $\mu$ under $H_0$. Interpret this as the \# of $SE$
+above/below the mean of the null distribution. \\
+The $p$ value is the area under the $t$ distribution, with $n - 1$ degrees of freedom. \\
 
-
-\subsection{Floating bodies}
-\settowidth{\MyLen}{\texttt{.begin.equation..place.}}
-\begin{tabular}{@{}p{\the\MyLen}%
-                @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\begin{table}[!\textit{place}\verb!]!     &  Add numbered table. \\
-\verb!\begin{figure}[!\textit{place}\verb!]!    &  Add numbered figure. \\
-\verb!\begin{equation}[!\textit{place}\verb!]!  &  Add numbered equation. \\
-\verb!\caption{!\textit{text}\verb!}!           &  Caption for the body. \\
+\subsection{Inference on Multiple Means}
+Data can be paired or unpaired. 
+Paired data is observations that are similar, and we are interested in differences between them. \\
+\textbf{For paired data:} \\
+Consider a new distribution of the \textbf{differences} in each pair of observations. \\
+Hypothesis testing, confidence intervals, etc. are exectly the same as inference on a single mean, just on the difference between means this time.
+\textbf{For unpaired data:} \\ 
+If the variance of the 2 distributions is similar, use the 2-sample:
+\begin{tabular}{@{}c@{}|@{}c@{}}
+        \hline
+$SE(\bar{X}-\bar{Y})$ & $SE=\sqrt{\frac{\sum(x_i-\bar{x})^2+\sum(y_i-\bar{y})^2}{n_x+n_y-2}}\cdot\sqrt{\frac1{n_x}+\frac1{n_y}}$   \\
+Statistic & $t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\bar{Y})}$  \\
+Degrees of freedom & $\textstyle DF=n_x+n_y-2$   \\
+Interval & $(\bar{X}-\bar{Y})\pm t_{crit}*SE$   \\
+\end{tabular} \\
+Welch when variance different. \\
+\begin{tabular}{@{}c@{}|@{}c@{}}
+        \hline
+$SE(\bar{X}-\bar{Y})$ & $SE=\sqrt{\frac{s_x^2}{n_x}+\frac{s_y^2}{n_y}}$  \\
+Statistic & $t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\bar{Y})}$  \\
+Degrees of freedom & $DF=\frac{(s_x^2/n_x\,+\,s_y^2/n_y)^2}{(s_x^2/n_x)^2/(n_x-1)\,+\,(s_y^2/n_y)^2/(n_y-1)}$  \\
+Interval & $(\bar{X}-\bar{Y})\pm t_{crit}*SE$  \\
 \end{tabular}
+Where $\mu_{X0} - \mu_{Y0}$ is the difference in means assumed under $H_0$. \\
+$p$ process is same as before, find area under $t$ distribution according to $H_a$.
+\subsection{T Distributions}
+Recall the $T$ statistic for inference on means. \\
+$T = \frac{\bar{X} - \mu_0}{s / \sqrt{n}}$, notice that we use $s$, a point estimate for $\sigma$.
+This introduces randomness, so $T$ is not quite normally distributed, so we use $t$ distribution. \\
+The standard deviation is $\frac{d}{d-2}$, $d > 2$ where $d$ is degrees of freedom. If $d \in \mathbb{Z}$, round it down. 
+In practice, the $t$ distribution converges to the normal as $d$ increases. Still, it resembles a stretched normal. 
 
-The \textit{place} is a list valid placements for the body.  \texttt{t}=top,
-\texttt{h}=here, \texttt{b}=bottom, \texttt{p}=separate page, \texttt{!}=place even if ugly.  Captions and label markers should be within the environment.
-
-%---------------------------------------------------------------------------
-
-\section{Text properties}
-
+\section{Regression}
 \subsection{Font face}
 \newcommand{\FontCmd}[3]{\PBS\verb!\#1{!\textit{text}\verb!}!  \> %
                          \verb!{\#2 !\textit{text}\verb!}! \> %
@@ -824,16 +899,6 @@ second &  row  &  data \\
 The table is numbered \ref{ex:table}.
 \end{document}
 \end{verbatim}
-
-
-
-\rule{0.3\linewidth}{0.25pt}
-\scriptsize
-
-Copyright \copyright\ 2014 Winston Chang
-
-\href{http://wch.github.io/latexsheet/}{http://wch.github.io/latexsheet/}
-
 
 \end{multicols}
 \end{document}

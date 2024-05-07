@@ -20,7 +20,7 @@ rbinom, dbinom, pbinom, qbinom
 
 Central Limit theorem
 Agresti-coull method
+
 Hypothesis testing (EVERYTHING)
-Expectation stuff
 Power law
 Confidence & prediction intervals
