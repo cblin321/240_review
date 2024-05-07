@@ -377,7 +377,8 @@ $s$ & $\sqrt{\frac{\sum_{i = 1}^{n}(x_i - \bar{x})^2}{n - 1}}$
 \end{tabular}
 *$\mu_0$ is the value assumed to be $\mu$ under $H_0$. Interpret this as the \# of $SE$
 above/below the mean of the null distribution. \\
-The $p$ value is the area under the $t$ distribution, with $n - 1$ degrees of freedom. \\
+The $p$ value is the area under the $t$ distribution WRT the $T$ statistic, with $n - 1$ degrees of freedom. \\
+\textbf{WHEN FINDING THE CI OF ANY NORMAL/T DISTRIBUTIONS THE CRITICAL VALUE IS SOME QNORM/QT ACCORDING TO THE DESIRED CONFIDENCE LEVEL}. \\
 
 \subsection{Inference on Multiple Means}
 Data can be paired or unpaired. 
@@ -386,7 +387,7 @@ Paired data is observations that are similar, and we are interested in differenc
 Consider a new distribution of the \textbf{differences} in each pair of observations. \\
 Hypothesis testing, confidence intervals, etc. are exectly the same as inference on a single mean, just on the difference between means this time.
 \textbf{For unpaired data:} \\ 
-If the variance of the 2 distributions is similar, use the 2-sample:
+\textbf{If the variance of the 2 distributions is similar, use the 2-sample:}
 \begin{tabular}{@{}c@{}|@{}c@{}}
         \hline
 $SE(\bar{X}-\bar{Y})$ & $SE=\sqrt{\frac{\sum(x_i-\bar{x})^2+\sum(y_i-\bar{y})^2}{n_x+n_y-2}}\cdot\sqrt{\frac1{n_x}+\frac1{n_y}}$   \\
@@ -394,16 +395,16 @@ Statistic & $t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\ba
 Degrees of freedom & $\textstyle DF=n_x+n_y-2$   \\
 Interval & $(\bar{X}-\bar{Y})\pm t_{crit}*SE$   \\
 \end{tabular} \\
-Welch when variance different. \\
+\textbf{Welch when variance different:} \\
 \begin{tabular}{@{}c@{}|@{}c@{}}
         \hline
 $SE(\bar{X}-\bar{Y})$ & $SE=\sqrt{\frac{s_x^2}{n_x}+\frac{s_y^2}{n_y}}$  \\
 Statistic & $t_{obs}=\frac{(\bar{X}-\bar{Y})-(\mu_{X0}-\mu_{Y0})}{SE(\bar{X}-\bar{Y})}$  \\
 Degrees of freedom & $DF=\frac{(s_x^2/n_x\,+\,s_y^2/n_y)^2}{(s_x^2/n_x)^2/(n_x-1)\,+\,(s_y^2/n_y)^2/(n_y-1)}$  \\
 Interval & $(\bar{X}-\bar{Y})\pm t_{crit}*SE$  \\
-\end{tabular}
+\end{tabular} \\
 Where $\mu_{X0} - \mu_{Y0}$ is the difference in means assumed under $H_0$. \\
-$p$ process is same as before, find area under $t$ distribution according to $H_a$.
+$p$ process is same as before, find area under $t$ distribution according to $H_a$ WRT the $T$ statistic.
 \subsection{T Distributions}
 Recall the $T$ statistic for inference on means. \\
 $T = \frac{\bar{X} - \mu_0}{s / \sqrt{n}}$, notice that we use $s$, a point estimate for $\sigma$.
@@ -412,493 +413,43 @@ The standard deviation is $\frac{d}{d-2}$, $d > 2$ where $d$ is degrees of freed
 In practice, the $t$ distribution converges to the normal as $d$ increases. Still, it resembles a stretched normal. 
 
 \section{Regression}
-\subsection{Font face}
-\newcommand{\FontCmd}[3]{\PBS\verb!\#1{!\textit{text}\verb!}!  \> %
-                         \verb!{\#2 !\textit{text}\verb!}! \> %
-                         \#1{#3}}
-\begin{tabular}{@{}l@{}l@{}l@{}}
-\textit{Command} & \textit{Declaration} & \textit{Effect} \\
-\verb!\textrm{!\textit{text}\verb!}!                    & %
-        \verb!{\rmfamily !\textit{text}\verb!}!               & %
-        \textrm{Roman family} \\
-\verb!\textsf{!\textit{text}\verb!}!                    & %
-        \verb!{\sffamily !\textit{text}\verb!}!               & %
-        \textsf{Sans serif family} \\
-\verb!\texttt{!\textit{text}\verb!}!                    & %
-        \verb!{\ttfamily !\textit{text}\verb!}!               & %
-        \texttt{Typewriter family} \\
-\verb!\textmd{!\textit{text}\verb!}!                    & %
-        \verb!{\mdseries !\textit{text}\verb!}!               & %
-        \textmd{Medium series} \\
-\verb!\textbf{!\textit{text}\verb!}!                    & %
-        \verb!{\bfseries !\textit{text}\verb!}!               & %
-        \textbf{Bold series} \\
-\verb!\textup{!\textit{text}\verb!}!                    & %
-        \verb!{\upshape !\textit{text}\verb!}!               & %
-        \textup{Upright shape} \\
-\verb!\textit{!\textit{text}\verb!}!                    & %
-        \verb!{\itshape !\textit{text}\verb!}!               & %
-        \textit{Italic shape} \\
-\verb!\textsl{!\textit{text}\verb!}!                    & %
-        \verb!{\slshape !\textit{text}\verb!}!               & %
-        \textsl{Slanted shape} \\
-\verb!\textsc{!\textit{text}\verb!}!                    & %
-        \verb!{\scshape !\textit{text}\verb!}!               & %
-        \textsc{Small Caps shape} \\
-\verb!\emph{!\textit{text}\verb!}!                      & %
-        \verb!{\em !\textit{text}\verb!}!               & %
-        \emph{Emphasized} \\
-\verb!\textnormal{!\textit{text}\verb!}!                & %
-        \verb!{\normalfont !\textit{text}\verb!}!       & %
-        \textnormal{Document font} \\
-\verb!\underline{!\textit{text}\verb!}!                 & %
-                                                        & %
-        \underline{Underline}
-\end{tabular}
-
-The command (t\textit{tt}t) form handles spacing better than the
-declaration (t{\itshape tt}t) form.
-
-\subsection{Font size}
-\setlength{\columnsep}{14pt} % Need to move columns apart a little
-\begin{multicols}{2}
-\begin{tabbing}
-\verb!\footnotesize!          \= \kill
-\verb!\tiny!                  \>  \tiny{tiny} \\
-\verb!\scriptsize!            \>  \scriptsize{scriptsize} \\
-\verb!\footnotesize!          \>  \footnotesize{footnotesize} \\
-\verb!\small!                 \>  \small{small} \\
-\verb!\normalsize!            \>  \normalsize{normalsize} \\
-\verb!\large!                 \>  \large{large} \\
-\verb!\Large!                 \=  \Large{Large} \\  % Tab hack for new column
-\verb!\LARGE!                 \>  \LARGE{LARGE} \\
-\verb!\huge!                  \>  \huge{huge} \\
-\verb!\Huge!                  \>  \Huge{Huge}
-\end{tabbing}
-\end{multicols}
-\setlength{\columnsep}{1pt} % Set column separation back
-
-These are declarations and should be used in the form
-\verb!{\small! \ldots\verb!}!, or without braces to affect the entire
-document.
-
-
-\subsection{Verbatim text}
-
-\settowidth{\MyLen}{\texttt{.begin.verbatim..} }
-\begin{tabular}{@{}p{\the\MyLen}%
+\subsection{Linear Regression}
+$y = \beta_0 + \beta_1x_i + \epsilon_i$ ST the line minimizes the sum squared error. \\
+\textbf{Formulas:} \\
+\begin{tabular}{@{}c@{}c@{}}
+        $r = Corr(x, y)$* & \hskip.5em $\frac{1}{n - 1}\sum_{i = 1}^{n}\frac{x_i-\bar{x}}{s_x}\frac{y_i-\bar{y}}{s_y}$\\
+        $\hat{\beta_1}$ & $r * \frac{s_y}{s_x}$ \\        
+        $\hat{\beta_0}$ & $\bar{y} - \hat{\beta_1}\bar{x}$ \\        
+\end{tabular} \\
+        *$r$ assumes $x$ \& $y$ linearly related, measures strength of assumed relationship. \\
+        The regression line always goes thru $(\bar{x}, \bar{y})$. \\
+        If the residual grpah is curved, $\bar{\epsilon} \ne 0$. If there's fanning out/narrowing in residual plot, $SE(\epsilon)$ is not constant. \\
+        \textbf{Confidence intervals for $E(y \mid x^*)$} \\
+        This is a confidence interval for the mean $y$ given some $x^*$. 
+        For example, if there were infinite observations of $x^*$ we would be $p\%$ confident they fall into a given range (you can also think of this as a confidence interval for points regression line passes thru). \\
+        $s_{\hat{y}} = \sqrt{\left((n-2)^{-1} \sum_{i=1}^n(y_i - \hat{y}_i)^2\right)\left(n^{-1} + \frac{(x^* - \overline{x})^2}{\sum_{i = 1}^n (x_i - \overline{x})^2} \right)}$ \\
+        \textbf{Prediction intervals for $E(y^* \mid x^*)$} \\
+        This is a confidence interval for some random $y^*$. So not only do we account for uncertainty in $\beta_0$ and $\beta_1$, we also have randomness in $\epsilon$. Since, by nature observations have randomness baked in which is encoded by $\epsilon$. \\
+        As such, this interval is wider than the confidence interval. \\
+        Prediction interval is an interval that 95\% of observations in the dataset will be in \\
+        $s_{\hat{y}^*} = \sqrt{\left((n-2)^{-1} \sum_{i=1}^n(y_i - \hat{y}_i)^2\right)\left(1 + n^{-1} + \frac{(x^* - \overline{x})^2}{\sum_{i = 1}^n (x_i - \overline{x})^2} \right)}$. \\
+        \subsection{Power Law}
+        Sometimes a relationship can only be expressed as $y = C * x^\theta$, this is the power law. \\
+        In this case apply a log transform to the data, that way it is normal. Any models fit on this data will predict \textbf{$log_{l}$(y)}, however. \\
+        The regression line is trying to predict the mean for each observation. That is, each observation will have a bit of randomness, 
+        the regression line wants to capture the mean of all the hypothetical observations. So we say $y_i \sim N(log_{l}(C) + \theta x_i, \sigma)$. \\
+        To hypothesis test whether the power law is appropriate we carry out the following hypothesis test (assuming $\epsilon \sim N(0, \sigma)$): \\
+        $H_0: \theta = 1$, $H_a: \theta \ne 1$. \\
+        \textbf{Hypothesis testing:} \\
+        \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
-\verb@\begin{verbatim}@ & Verbatim environment. \\
-\verb@\begin{verbatim*}@ & Spaces are shown as \verb*@ @. \\
-\verb@\verb!text!@ & Text between the delimiting characters (in this case %
-                      `\texttt{!}') is verbatim.
-\end{tabular}
+                $T$ & $\frac{\hat{\theta} - 1}{s_{\hat{\theta}}}$ \\
+                $s_{\hat{\theta}}$ & $\sqrt{\frac{\sum_{i = 1}^n \epsilon_i^2 / (n - 2)}{\sum_{i = 1}{n}(x_i - \bar{x})^2}}$ 
+        \end{tabular}
+        Use $n - 2$ degrees of freedom when doing inference on regression. \\
+        This has the same process as inference on a single mean. \\
 
 
-\subsection{Justification}
-\begin{tabular}{@{}ll@{}}
-\textit{Environment}  &  \textit{Declaration}  \\
-\verb!\begin{center}!      & \verb!\centering!  \\
-\verb!\begin{flushleft}!  & \verb!\raggedright! \\
-\verb!\begin{flushright}! & \verb!\raggedleft!  \\
-\end{tabular}
-
-\subsection{Miscellaneous}
-\verb!\linespread{!$x$\verb!}! changes the line spacing by the
-multiplier $x$.
-
-
-
-
-
-\section{Text-mode symbols}
-
-\subsection{Symbols}
-\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{}}
-\&              &  \verb!\&! &
-\_              &  \verb!\_! &
-\ldots          &  \verb!\ldots! &
-\textbullet     &  \verb!\textbullet! \\
-\$              &  \verb!\$! &
-\^{}            &  \verb!\^{}! &
-\textbar        &  \verb!\textbar! &
-\textbackslash  &  \verb!\textbackslash! \\
-\%              &  \verb!\%! &
-\~{}            &  \verb!\~{}! &
-\#              &  \verb!\#! &
-\S              &  \verb!\S! \\
-\end{tabular}
-
-\subsection{Accents}
-\begin{tabular}{@{}l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l|l@{\ }l@{}}
-\`o   & \verb!\`o! &
-\'o   & \verb!\'o! &
-\^o   & \verb!\^o! &
-\~o   & \verb!\~o! &
-\=o   & \verb!\=o! \\
-\.o   & \verb!\.o! &
-\"o   & \verb!\"o! &
-\c o  & \verb!\c o! &
-\v o  & \verb!\v o! &
-\H o  & \verb!\H o! \\
-\c c  & \verb!\c c! &
-\d o  & \verb!\d o! &
-\b o  & \verb!\b o! &
-\t oo & \verb!\t oo! &
-\oe   & \verb!\oe! \\
-\OE   & \verb!\OE! &
-\ae   & \verb!\ae! &
-\AE   & \verb!\AE! &
-\aa   & \verb!\aa! &
-\AA   & \verb!\AA! \\
-\o    & \verb!\o! &
-\O    & \verb!\O! &
-\l    & \verb!\l! &
-\L    & \verb!\L! &
-\i    & \verb!\i! \\
-\j    & \verb!\j! &
-!`    & \verb!~`! &
-?`    & \verb!?`! &
-\end{tabular}
-
-
-\subsection{Delimiters}
-\begin{tabular}{@{}l@{\ }ll@{\ }ll@{\ }ll@{\ }ll@{\ }ll@{\ }l@{}}
-`       & \verb!`!  &
-``      & \verb!``! &
-\{      & \verb!\{! &
-\lbrack & \verb![! &
-(       & \verb!(! &
-\textless  &  \verb!\textless! \\
-'       & \verb!'!  &
-''      & \verb!''! &
-\}      & \verb!\}! &
-\rbrack & \verb!]! &
-)       & \verb!)! &
-\textgreater  &  \verb!\textgreater! \\
-\end{tabular}
-
-\subsection{Dashes}
-\begin{tabular}{@{}llll@{}}
-\textit{Name} & \textit{Source} & \textit{Example} & \textit{Usage} \\
-hyphen  & \verb!-!   & X-ray          & In words. \\
-en-dash & \verb!--!  & 1--5           & Between numbers. \\
-em-dash & \verb!---! & Yes---or no?    & Punctuation.
-\end{tabular}
-
-
-\subsection{Line and page breaks}
-\settowidth{\MyLen}{\texttt{.pagebreak} }
-\begin{tabular}{@{}p{\the\MyLen}%
-                @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\\!          &  Begin new line without new paragraph.  \\
-\verb!\\*!         &  Prohibit pagebreak after linebreak. \\
-\verb!\kill!       &  Don't print current line. \\
-\verb!\pagebreak!  &  Start new page. \\
-\verb!\noindent!   &  Do not indent current line.
-\end{tabular}
-
-
-\subsection{Miscellaneous}
-\settowidth{\MyLen}{\texttt{.rule.w..h.} }
-\begin{tabular}{@{}p{\the\MyLen}%
-                @{}p{\linewidth-\the\MyLen}@{}}
-\verb!\today!  &  \today. \\
-\verb!$\sim$!  &  Prints $\sim$ instead of \verb!\~{}!, which makes \~{}. \\
-\verb!~!       &  Space, disallow linebreak (\verb!W.J.~Clinton!). \\
-\verb!\@.!     &  Indicate that the \verb!.! ends a sentence when following
-                        an uppercase letter. \\
-\verb!\hspace{!$l$\verb!}! & Horizontal space of length $l$
-                                (Ex: $l=\mathtt{20pt}$). \\
-\verb!\vspace{!$l$\verb!}! & Vertical space of length $l$. \\
-\verb!\rule{!$w$\verb!}{!$h$\verb!}! & Line of width $w$ and height $h$. \\
-\end{tabular}
-
-
-
-\section{Tabular environments}
-
-\subsection{\texttt{tabbing} environment}
-\begin{tabular}{@{}l@{\hspace{1.5ex}}l@{\hspace{10ex}}l@{\hspace{1.5ex}}l@{}}
-\verb!\=!  &   Set tab stop. &
-\verb!\>!  &   Go to tab stop.
-\end{tabular}
-
-Tab stops can be set on ``invisible'' lines with \verb!\kill!
-at the end of the line.  Normally \verb!\\! is used to separate lines.
-
-
-\subsection{\texttt{tabular} environment}
-\verb!\begin{array}[!\textit{pos}\verb!]{!\textit{cols}\verb!}!   \\
-\verb!\begin{tabular}[!\textit{pos}\verb!]{!\textit{cols}\verb!}! \\
-\verb!\begin{tabular*}{!\textit{width}\verb!}[!\textit{pos}\verb!]{!\textit{cols}\verb!}!
-
-
-\subsubsection{\texttt{tabular} column specification}
-\settowidth{\MyLen}{\texttt{p}\{\textit{width}\} \ }
-\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
-\texttt{l}    &   Left-justified column.  \\
-\texttt{c}    &   Centered column.  \\
-\texttt{r}    &   Right-justified column. \\
-\verb!p{!\textit{width}\verb!}!  &  Same as %
-                              \verb!\parbox[t]{!\textit{width}\verb!}!. \\ 
-\verb!@{!\textit{decl}\verb!}!   &  Insert \textit{decl} instead of
-                                    inter-column space. \\
-\verb!|!      &   Inserts a vertical line between columns. 
-\end{tabular}
-
-
-\subsubsection{\texttt{tabular} elements}
-\settowidth{\MyLen}{\texttt{.cline.x-y..}}
-\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
-\verb!\hline!           &  Horizontal line between rows.  \\
-\verb!\cline{!$x$\verb!-!$y$\verb!}!  &
-                        Horizontal line across columns $x$ through $y$. \\
-\verb!\multicolumn{!\textit{n}\verb!}{!\textit{cols}\verb!}{!\textit{text}\verb!}! \\
-        &  A cell that spans \textit{n} columns, with \textit{cols} column specification.
-\end{tabular}
-
-\section{Math mode}
-For inline math, use \verb!\(...\)! or \verb!$...$!.
-For displayed math, use \verb!\[...\]! or \verb!\begin{equation}!.
-
-\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{2em}}l@{\hspace{1em}}l@{}}
-Superscript$^{x}$       &
-\verb!^{x}!             &  
-Subscript$_{x}$         &
-\verb!_{x}!             \\  
-$\frac{x}{y}$           &
-\verb!\frac{x}{y}!      &  
-$\sum_{k=1}^n$          &
-\verb!\sum_{k=1}^n!     \\  
-$\sqrt[n]{x}$           &
-\verb!\sqrt[n]{x}!      &  
-$\prod_{k=1}^n$         &
-\verb!\prod_{k=1}^n!    \\ 
-\end{tabular}
-
-\subsection{Math-mode symbols}
-
-% The ordering of these symbols is slightly odd.  This is because I had to put all the
-% long pieces of text in the same column (the right) for it all to fit properly.
-% Otherwise, it wouldn't be possible to fit four columns of symbols here.
-
-\begin{tabular}{@{}l@{\hspace{1ex}}l@{\hspace{1em}}l@{\hspace{1ex}}l@{\hspace{1em}}l@{\hspace{1ex}} l@{\hspace{1em}}l@{\hspace{1ex}}l@{}}
-$\leq$          &  \verb!\leq!  &
-$\geq$          &  \verb!\geq!  &
-$\neq$          &  \verb!\neq!  &
-$\approx$       &  \verb!\approx!  \\
-$\times$        &  \verb!\times!  &
-$\div$          &  \verb!\div!  &
-$\pm$           & \verb!\pm!  &
-$\cdot$         &  \verb!\cdot!  \\
-$^{\circ}$      & \verb!^{\circ}! &
-$\circ$         &  \verb!\circ!  &
-$\prime$        & \verb!\prime!  &
-$\cdots$        &  \verb!\cdots!  \\
-$\infty$        & \verb!\infty!  &
-$\neg$          & \verb!\neg!  &
-$\wedge$        & \verb!\wedge!  &
-$\vee$          & \verb!\vee!  \\
-$\supset$       & \verb!\supset!  &
-$\forall$       & \verb!\forall!  &
-$\in$           & \verb!\in!  &
-$\rightarrow$   &  \verb!\rightarrow! \\
-$\subset$       & \verb!\subset!  &
-$\exists$       & \verb!\exists!  &
-$\notin$        & \verb!\notin!  &
-$\Rightarrow$   &  \verb!\Rightarrow! \\
-$\cup$          & \verb!\cup!  &
-$\cap$          & \verb!\cap!  &
-$\mid$          & \verb!\mid!  &
-$\Leftrightarrow$   &  \verb!\Leftrightarrow! \\
-$\dot a$        & \verb!\dot a!  &
-$\hat a$        & \verb!\hat a!  &
-$\bar a$        & \verb!\bar a!  &
-$\tilde a$      & \verb!\tilde a!  \\
-
-$\alpha$        &  \verb!\alpha!  &
-$\beta$         &  \verb!\beta!  &
-$\gamma$        &  \verb!\gamma!  &
-$\delta$        &  \verb!\delta!  \\
-$\epsilon$      &  \verb!\epsilon!  &
-$\zeta$         &  \verb!\zeta!  &
-$\eta$          &  \verb!\eta!  &
-$\varepsilon$   &  \verb!\varepsilon!  \\
-$\theta$        &  \verb!\theta!  &
-$\iota$         &  \verb!\iota!  &
-$\kappa$        &  \verb!\kappa!  &
-$\vartheta$     &  \verb!\vartheta!  \\
-$\lambda$       &  \verb!\lambda!  &
-$\mu$           &  \verb!\mu!  &
-$\nu$           &  \verb!\nu!  &
-$\xi$           &  \verb!\xi!  \\
-$\pi$           &  \verb!\pi!  &
-$\rho$          &  \verb!\rho!  &
-$\sigma$        &  \verb!\sigma!  &
-$\tau$          &  \verb!\tau!  \\
-$\upsilon$      &  \verb!\upsilon!  &
-$\phi$          &  \verb!\phi!  &
-$\chi$          &  \verb!\chi!  &
-$\psi$          &  \verb!\psi!  \\
-$\omega$        &  \verb!\omega!  &
-$\Gamma$        &  \verb!\Gamma!  &
-$\Delta$        &  \verb!\Delta!  &
-$\Theta$        &  \verb!\Theta!  \\
-$\Lambda$       &  \verb!\Lambda!  &
-$\Xi$           &  \verb!\Xi!  &
-$\Pi$           &  \verb!\Pi!  &
-$\Sigma$        &  \verb!\Sigma!  \\
-$\Upsilon$      &  \verb!\Upsilon!  &
-$\Phi$          &  \verb!\Phi!  &
-$\Psi$          &  \verb!\Psi!  &
-$\Omega$        &  \verb!\Omega!  
-\end{tabular}
-\footnotesize
-
-%\subsection{Special symbols}
-%\begin{tabular}{@{}ll@{}}
-%$^{\circ}$  &  \verb!^{\circ}! Ex: $22^{\circ}\mathrm{C}$: \verb!$22^{\circ}\mathrm{C}$!.
-%\end{tabular}
-
-\section{Bibliography and citations}
-When using \BibTeX, you need to run \texttt{latex}, \texttt{bibtex},
-and \texttt{latex} twice more to resolve dependencies.
-
-\subsection{Citation types}
-\settowidth{\MyLen}{\texttt{.shortciteN.key..}}
-\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
-\verb!\cite{!\textit{key}\verb!}!       &
-        Full author list and year. (Watson and Crick 1953) \\
-\verb!\citeA{!\textit{key}\verb!}!      &
-        Full author list. (Watson and Crick) \\
-\verb!\citeN{!\textit{key}\verb!}!      &
-        Full author list and year. Watson and Crick (1953) \\
-\verb!\shortcite{!\textit{key}\verb!}!  &
-        Abbreviated author list and year. ? \\
-\verb!\shortciteA{!\textit{key}\verb!}! &
-        Abbreviated author list. ? \\
-\verb!\shortciteN{!\textit{key}\verb!}! &
-        Abbreviated author list and year. ? \\
-\verb!\citeyear{!\textit{key}\verb!}!   &
-        Cite year only. (1953) \\
-\end{tabular}
-
-All the above have an \texttt{NP} variant without parentheses;
-Ex. \verb!\citeNP!.
-
-
-\subsection{\BibTeX\ entry types}
-\settowidth{\MyLen}{\texttt{.mastersthesis.}}
-\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
-\verb!@article!         &  Journal or magazine article. \\
-\verb!@book!            &  Book with publisher. \\
-\verb!@booklet!         &  Book without publisher. \\
-\verb!@conference!      &  Article in conference proceedings. \\
-\verb!@inbook!          &  A part of a book and/or range of pages. \\
-\verb!@incollection!    &  A part of book with its own title. \\
-%\verb!@manual!          &  Technical documentation. \\
-%\verb!@mastersthesis!   &  Master's thesis. \\
-\verb!@misc!            &  If nothing else fits. \\
-\verb!@phdthesis!       &  PhD. thesis. \\
-\verb!@proceedings!     &  Proceedings of a conference. \\
-\verb!@techreport!      &  Tech report, usually numbered in series. \\
-\verb!@unpublished!     &  Unpublished. \\
-\end{tabular}
-
-\subsection{\BibTeX\ fields}
-\settowidth{\MyLen}{\texttt{organization.}}
-\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
-\verb!address!         &  Address of publisher.  Not necessary for major
-                                publishers.  \\
-\verb!author!           &  Names of authors, of format .... \\
-\verb!booktitle!        &  Title of book when part of it is cited. \\
-\verb!chapter!          &  Chapter or section number. \\
-\verb!edition!          &  Edition of a book. \\
-\verb!editor!           &  Names of editors. \\
-\verb!institution!      &  Sponsoring institution of tech.\ report. \\
-\verb!journal!          &  Journal name. \\
-\verb!key!              &  Used for cross ref.\ when no author. \\
-\verb!month!            &  Month published. Use 3-letter abbreviation. \\
-\verb!note!             &  Any additional information. \\
-\verb!number!           &  Number of journal or magazine. \\
-\verb!organization!     &  Organization that sponsors a conference. \\
-\verb!pages!            &  Page range (\verb!2,6,9--12!). \\
-\verb!publisher!        &  Publisher's name. \\
-\verb!school!           &  Name of school (for thesis). \\
-\verb!series!           &  Name of series of books. \\
-\verb!title!            &  Title of work. \\
-\verb!type!             &  Type of tech.\ report, ex. ``Research Note''. \\
-\verb!volume!           &  Volume of a journal or book. \\
-\verb!year!             &  Year of publication. \\
-\end{tabular}
-Not all fields need to be filled.  See example below.
-
-\subsection{Common \BibTeX\ style files}
-\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{3em}}l@{\hspace{1em}}l@{}}
-\verb!abbrv!    &  Standard &
-\verb!abstract! &  \texttt{alpha} with abstract \\
-\verb!alpha!    &  Standard &
-\verb!apa!      &  APA \\
-\verb!plain!    &  Standard &
-\verb!unsrt!    &  Unsorted \\
-\end{tabular}
-
-The \LaTeX\ document should have the following two lines just before
-\verb!\end{document}!, where \verb!bibfile.bib! is the name of the
-\BibTeX\ file.
-\begin{verbatim}
-\bibliographystyle{plain}
-\bibliography{bibfile}
-\end{verbatim}
-
-\subsection{\BibTeX\ example}
-The \BibTeX\ database goes in a file called
-\textit{file}\texttt{.bib}, which is processed with \verb!bibtex file!. 
-\begin{verbatim}
-@String{N = {Na\-ture}}
-@Article{WC:1953,
-  author  = {James Watson and Francis Crick},
-  title   = {A structure for Deoxyribose Nucleic Acid},
-  journal = N,
-  volume  = {171},
-  pages   = {737},
-  year    = 1953
-}
-\end{verbatim}
-
-
-\section{Sample \LaTeX\ document}
-\begin{verbatim}
-\documentclass[11pt]{article}
-\usepackage{fullpage}
-\title{Template}
-\author{Name}
-\begin{document}
-\maketitle
-
-\section{section}
-\subsection*{subsection without number}
-text \textbf{bold text} text. Some math: $2+2=5$
-\subsection{subsection}
-text \emph{emphasized text} text. \cite{WC:1953}
-discovered the structure of DNA.
-
-A table:
-\begin{table}[!th]
-\begin{tabular}{|l|c|r|}
-\hline
-first  &  row  &  data \\
-second &  row  &  data \\
-\hline
-\end{tabular}
-\caption{This is the caption}
-\label{ex:table}
-\end{table}
-
-The table is numbered \ref{ex:table}.
-\end{document}
-\end{verbatim}
 
 \end{multicols}
 \end{document}

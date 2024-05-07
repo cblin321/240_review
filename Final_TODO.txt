@@ -22,5 +22,9 @@ Central Limit theorem
 Agresti-coull method
 
 Hypothesis testing (EVERYTHING)
+Means
+DIfference in means
+
+Regressiokn
 Power law
 Confidence & prediction intervals

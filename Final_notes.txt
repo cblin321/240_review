@@ -138,7 +138,7 @@ z = qt(p, df - 1), where df is the number of observations
 T = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}, where \mu_0 is the hypothesized mean for the null hypothesis 
 sample variance = \sum_{i = 1}^{n}\frac{(x_i - \bar{x})^2}{n - 1}
 When n is small the T distribution is like a stretched out normal
-When you have paired data you are more interested inthe difference between observations (on the same subject)
+When you have paired data you are more interested in the difference between observations (on the same subject)
 For paired just do the T test on the difference between observations
 ALWAYS ROUND DOWN DEGREES OF FREEDOM IF THEY'RE INTEGERS
 
