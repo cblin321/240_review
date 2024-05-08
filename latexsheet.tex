@@ -253,10 +253,11 @@ Properties of Binomials
 \begin{tabular}{@{}p{\the\MyLen}%
         @{}p{\linewidth-\the\MyLen}@{}}
 \verb!b! & binary outcomes \\
-\verb!i! & independence \\
+\verb!i! & independence* \\
 \verb!n! & fixed sample size \\
 \verb!s! & same probability \\
 \end{tabular} \\
+Sampling w/o replacement violates this (when drawing from a set of outcomes you remove outcomes sampled). \\ 
 Binomial Formulas \\
 \begin{tabular}{@{}p{\the\MyLen}%
         @{}p{\linewidth-\the\MyLen}@{}}
@@ -302,6 +303,7 @@ Formulas ($\hat{P}$* is a random estimator for point estimate $\hat{p}$):
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
 $Var(\hat{P})$        &  $Var(\frac{X}{n}) = \frac{Var(X)}{n}$ \\
+$Var(X)$        &  $\frac{p(1-p)}{n}$ \\
 $SE(\hat{p})$          &  $\sqrt{Var(\hat{P})}$ \\
 CI      & \hskip3em  $\hat{p} \pm z * SE$ \\
 $z$      & \hskip3em  $qnorm(1 - \frac{p}{2})$* \\
@@ -325,13 +327,16 @@ Hypothesis testing - determine if a result we found was due to random chance
         \item Have a binomial model
         \item State $H_0$ and $H_A$
         \item Choose test statistic 
-        \item Find p-value and see if it's under some $\alpha$
+        \item Find p-value and see if it's under some $\alpha$*
 \end{enumerate}
+*Conventionally, we call $p < .05$ statistically significant and $p<.01$ highly statistically significant. \\
 Assume $H_0$ is true. Now find probability we observed a certain outcome. \\
 Suppose $H_0 | X \sim Binom(n, k)$ and $H_0: k = .5$, $H_A: k \ne .5$. 
-We observe $j$ successes and $n$ observations in total. Then $p$ is $2 * qnorm(j, n, .5)$, 
+We observe $j$ successes and $n$ observations in total. Then $p$ is $2 * pbinom(j, n, .5)$, 
 since the probability distribution is symmetric and $\ne$ necessitates a 2-sided test. 
 $H_0$ also assumes a binomial distribution w/ chance of success being $.5$. \\
+Findings are summarized in the following way: There is strong evidence (p=0.0021)
+, two-sided binomial test) that the chimpanzee in this experiment will make the pro-social choice more than half the time in the long run under similar experimental conditions. \\
 Differnce in Proportions\\
 \begin{tabular}{@{}p{\the\MyLen}%
         @{}p{\linewidth-\the\MyLen}@{}}
@@ -419,7 +424,8 @@ $y = \beta_0 + \beta_1x_i + \epsilon_i$ ST the line minimizes the sum squared er
 \begin{tabular}{@{}c@{}c@{}}
         $r = Corr(x, y)$* & \hskip.5em $\frac{1}{n - 1}\sum_{i = 1}^{n}\frac{x_i-\bar{x}}{s_x}\frac{y_i-\bar{y}}{s_y}$\\
         $\hat{\beta_1}$ & $r * \frac{s_y}{s_x}$ \\        
-        $\hat{\beta_0}$ & $\bar{y} - \hat{\beta_1}\bar{x}$ \\        
+        $\hat{\beta_0}$ & $\bar{y} - \hat{\beta_1}\bar{x}$ \\  
+        $sigma(lm)$ & extract SD of errors      
 \end{tabular} \\
         *$r$ assumes $x$ \& $y$ linearly related, measures strength of assumed relationship. \\
         The regression line always goes thru $(\bar{x}, \bar{y})$. \\
@@ -439,16 +445,19 @@ $y = \beta_0 + \beta_1x_i + \epsilon_i$ ST the line minimizes the sum squared er
         The regression line is trying to predict the mean for each observation. That is, each observation will have a bit of randomness, 
         the regression line wants to capture the mean of all the hypothetical observations. So we say $y_i \sim N(log_{l}(C) + \theta x_i, \sigma)$. \\
         To hypothesis test whether the power law is appropriate we carry out the following hypothesis test (assuming $\epsilon \sim N(0, \sigma)$): \\
-        $H_0: \theta = 1$, $H_a: \theta \ne 1$. \\
+        $H_0: \theta = 1$, $H_a: \theta \ne 1$. This is called a t-test for regression slope. \\
         \textbf{Hypothesis testing:} \\
         \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
-                $T$ & $\frac{\hat{\theta} - 1}{s_{\hat{\theta}}}$ \\
-                $s_{\hat{\theta}}$ & $\sqrt{\frac{\sum_{i = 1}^n \epsilon_i^2 / (n - 2)}{\sum_{i = 1}{n}(x_i - \bar{x})^2}}$ 
+                $T$ & $\frac{\hat{\theta} - \theta_0}{s_{\hat{\theta}}}$ \\
+                $s_{\hat{\theta}}$ & $\sqrt{\frac{\sum_{i = 1}^n \epsilon_i^2 / (n - 2)}{\sum_{i = 1}^{n}(x_i - \bar{x})^2}}$ 
         \end{tabular}
-        Use $n - 2$ degrees of freedom when doing inference on regression. \\
-        This has the same process as inference on a single mean. \\
-
+        Use $n - 2$ degrees of freedom when doing inference on regression. This has the same process as inference on a single mean. 
+\section{Specifics}
+\subsection{Inference}
+For any type of inference dealing w/ difference, if $H_a: u_1 \ne u_2 \equiv u_1 - u_2 < 0 \lor u_1 - u_2 > 0$. \\
+If you find $u_1$ and $u_2$ are not the same you can say something about which is greater.
+If there are any transformations done to $\theta$ in the power law. For example, $y = C * x^{-\theta}$, then the confidence intervals, etc. must reflect this. In practice, this involves multiplying the given $x$ from the linear model by $-1$.
 
 
 \end{multicols}
