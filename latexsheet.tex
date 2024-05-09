@@ -367,7 +367,8 @@ Say that $H_0: p_1 - p_2 = 0$, $H_A: p_1 \ne p_2$. Say that the number of succes
 Since we test $p_1 - p_2$ the differnces will be normally distributed. \\
 Estimate the combined probability as $\bar{p} = \frac{i_1 + i_2}{n_1 + n_2}$. \\
 Again, assuming $H_0$ is true calculate $z$. $z = \frac{(\hat{p_1} - \hat{p_2}) - (p_1 - p_2)}{SE}$. THIS $p_1 - p_2$ IS THE $p_1 - p_2$ DEFINED BY $H_0$. \\
- $p$ is the area area under the standard normal, or $2 * P(X > z)$ in this case.
+ $p$ is the area area under the standard normal, or $2 * P(X > z)$ in this case. \\
+ This test is called the z test for differences in proportions.
 
 \subsection{Inference on Means}
 \settowidth{\MyLen}{\texttt{.pageref.marker..}}
@@ -454,11 +455,51 @@ $y = \beta_0 + \beta_1x_i + \epsilon_i$ ST the line minimizes the sum squared er
         \end{tabular}
         Use $n - 2$ degrees of freedom when doing inference on regression. This has the same process as inference on a single mean. 
 \section{Specifics}
+
 \subsection{Inference}
 For any type of inference dealing w/ difference, if $H_a: u_1 \ne u_2 \equiv u_1 - u_2 < 0 \lor u_1 - u_2 > 0$. \\
 If you find $u_1$ and $u_2$ are not the same you can say something about which is greater.
-If there are any transformations done to $\theta$ in the power law. For example, $y = C * x^{-\theta}$, then the confidence intervals, etc. must reflect this. In practice, this involves multiplying the given $x$ from the linear model by $-1$.
+If there are any transformations done to $\theta$ in the power law. For example, $y = C * x^{-\theta}$, then the confidence intervals, etc. must reflect this. In practice, this involves multiplying the given $x$ from the linear model by $-1$. \\
+For all hypothesis tests the $q$ functions are used to find $t_crit$ and $p$ functions used to find $p-value$.
+\subsection{Linear Regression}
+Suppose you are given $r = .68$, $\bar{x} = 67$, $s_x = 4$, $s_y = 30$. Given $\hat{x} = 73$ what is $\hat{y}$? \\
+To solve find the z-score of $\bar{x}$ relative to its distribution, $z = \frac{73 - 67}{4} = 1.5$. Now for some reason, $\hat{y} = z * r * s_y = .68 * 1.5 * 30$. \\
 
+\subsection{Power Law}
+Suppose we have the following relationship $y = C * x^{-\theta}$. To validate the hypothesis we need $.16 \leq \theta \leq .19$, having $\theta = .25$ will invalidate the hypothesis. \\
+First we take the natural log to get a linear relationship $ln(y) = ln(C) + -\theta ln(x)$. A linear model is fit and we are given the ouput $summary(lm)$. Note that $n = 83$. \\
+\begin{tabular}{@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}}
+        Coeffs & Estimate & SE & T (assuming $\mu_{X_0} = \mu_{Y_0})$ & $P(> |t|)$ \\
+        \hline
+        Intercept & -0.17977 & 0.08046 & -2.234 & 0.0282 \\
+        x & -0.16071 & 0.02405 & -6.681 & 2.76e-09 \\
+\end{tabular} \\
+It also gives $df = 81$. \\
+The CI for $\theta$: $.16071 + c(-1, 1) * 0.02405 * qt(.975, 81)$. \\
+Assuming $H_0: \theta = .25$ and $H_a: \theta \ne .25$, the test statistic: $(.16071 - .25) / 0.02405$. The $p-value$: $pt((.16071 - .25) / 0.02405, 81)$. \\
+Suppose we are trying to prove Moore's law, that is $T = C2^{\frac{Y}{2}}$, where $T$ is the \# of transistors in a computer chip, and $Y$ is the year. \\
+Taking logs of both sides, $log_{10}(T) = log_{10}(C) + \frac{log_{10}2}{2}Y$, given $log_{10}2 / 2 = .1505$. $H_0: Y = .1505$, $H_a: Y \ne .1505$. $n = 99$. \\
+Suppose the test statistic is .1716, $p = 2 * qt(.1716, 97) = .86$. Then we conclude that the observed data is consistent with Moore’s law that number of transistors in computer chips doubles every two years (p=0.86
+, t-test for regression slope, 97 df).
 
+$\hat{y} = \hat{b_0} + \hat{b_1} * x$, $\hat{b_0} = \bar{y} - \hat{b_1}\bar{x}$, $\hat{b_1} = r * \frac{s_y}{s_x}$ \\
+Given $r = .68$, $s_y = 30$, $s_x = 4$, $\bar{x} = 67$, $x = 73$. Want to find $\hat{y} - \bar{y}$. \\
+$\hat{b_1} = .68 * (30 / 4) = .68 * 7.5$, $\hat{b_0} = \bar{y} - .68 * 7.5 * 67$. \\
+$\hat{y} = (\bar{y} - .68 * 7.5 * 67) + (.68 * 7.5 * 73)$ \\
+$\hat{y} - \bar{y} = .68 * 7.5 * 73 - .68 * 7.5 * 67 = 6 * .68 * 7.5$
+
+\subsection{Confidence Intervals}
+Single proportion: Use $N(0,1)$ for confidence intervals, use $z = qnorm(1 - ((1 - p) / 2))$ with it. \\
+Diff in proportions: $N(0,1)$ for confidence intervals, use $z = qnorm(1 - ((1 - p) / 2))$ with it. \\
+Single mean: $t(n-1)$, use $qt(1 - ((1 - p) / 2), n - 1)$ \\
+Diff in means: $t(\text{Welch's approximate degrees of freedom})$, use $qt(1 - ((1 - p) / 2), Welch's - 1)$ \\
+Linear regression: $t(n-2)$, use $z = qt(1 - ((1 - p) / 2), n - 2)$
+
+\subsection{Hypothesis Testing}
+Single proportions, $Binom(n, p_{null})$ for hypothesis testing, find $p$ using $pbinom(x, n, p_{null})$ \\
+Diff proportions, $N(0, 1)$ for hypothesis testing, find $p$ using $pnorm(z)$ \\
+Single mean, $t(n - 1)$, use $pt(T, n - 1)$. \\
+Diff in means: $t(\text{Welch's approximate degrees of freedom})$, use $pt(T, Welch's - 1)$ \\
+Linear regression: $t(n-2)$, use $z = pt(T, n - 2)$ \\
 \end{multicols}
 \end{document}
